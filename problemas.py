@@ -10,8 +10,6 @@ Tarea sobre búsquedas, donde lo que es importante es crear nuevas heurísticas
 
 import busquedas
 
-
-
 # ------------------------------------------------------------
 #  Desarrolla el modelo del Camión mágico
 # ------------------------------------------------------------
@@ -31,17 +29,34 @@ class PbCamionMagico(busquedas.ProblemaBusqueda):
     ----------------------------------------------------------------------------------
     
     """
-    def __init__(self):
-        raise NotImplementedError('Hay que hacerlo de tarea')
+    def __init__(self, meta=100):
+        self.meta = meta
+        self.acciones_legales = ['pie', 'camion']
 
     def acciones(self, estado):
-        raise NotImplementedError('Hay que hacerlo de tarea')
+        x, = estado
+
+        if 2 * x > self.meta:
+            return ['pie']
+        else:
+            return ['pie', 'camion']
 
     def sucesor(self, estado, accion):
-        raise NotImplementedError('Hay que hacerlo de tarea')
+        x, = estado
+
+        if accion == 'pie':
+            costo_local = 1
+            s_n = x + 1,
+        if accion == 'camion':
+            costo_local = 2
+            s_n = x * 2,
+
+        return s_n, costo_local
 
     def terminal(self, estado):
-        raise NotImplementedError('Hay que hacerlo de tarea')
+        x, = estado
+        
+        return True if x == self.meta else False
 
     @staticmethod
     def bonito(estado):
@@ -50,21 +65,37 @@ class PbCamionMagico(busquedas.ProblemaBusqueda):
 
         """
         raise NotImplementedError('Hay que hacerlo de tarea')
- 
 
 # ------------------------------------------------------------
 #  Desarrolla una política admisible.
 # ------------------------------------------------------------
 
-def h_1_camion_magico(nodo):
+def h_1_camion_magico(nodo, N):
     """
-    DOCUMENTA LA HEURÍSTICA QUE DESARROLLES Y DA UNA JUSTIFICACIÓN
-    PLATICADA DE PORQUÉ CREES QUE LA HEURÍSTICA ES ADMISIBLE
+    Mínimo de pasos
+
+    Bajamos el costo del camión a 1. Ahora ambos cuestan lo mismo,
+    entonces lo que importa son los pasos. Como la heurística
+    calcula el mínimo de pasos y el costo de una acción en el real
+    es mínimo 1, la heurística siempre regresará un costo (pasos) menor.
 
     """
-    return 0
+    pasos = 0
+    x = nodo.estado[0]
 
+    while N > x:
+        if N % 2 == 0 and N/2 >= x:
+            pasos += 1
+            N //= 2
+        elif N % 2 == 0 and N-1 >= x:
+            pasos += 1
+            N -= 1
+        elif N % 2 != 0 and N-1 >= x:
+            pasos += 1
+            N -= 1
 
+    return pasos
+                
 # ------------------------------------------------------------
 #  Desarrolla otra política admisible.
 #  Analiza y di porque piensas que es (o no es) dominante una
@@ -72,6 +103,7 @@ def h_1_camion_magico(nodo):
 # ------------------------------------------------------------
 
 def h_2_camion_magico(nodo):
+
     """
     DOCUMENTA LA HEURÍSTICA DE DESARROLLES Y DA UNA JUSTIFICACIÓN
     PLATICADA DE PORQUÉ CREES QUE LA HEURÍSTICA ES ADMISIBLE
@@ -110,7 +142,6 @@ class PbCuboRubik(busquedas.ProblemaBusqueda):
 
         """
         raise NotImplementedError('Hay que hacerlo de tarea')
- 
 
 # ------------------------------------------------------------
 #  Desarrolla una política admisible.
@@ -122,7 +153,6 @@ def h_1_problema_1(nodo):
 
     """
     return 0
-
 
 # ------------------------------------------------------------
 #  Desarrolla otra política admisible.
@@ -136,8 +166,6 @@ def h_2_problema_1(nodo):
 
     """
     return 0
-
-
 
 def compara_metodos(problema, pos_inicial, heuristica_1, heuristica_2):
     """
@@ -164,18 +192,16 @@ def compara_metodos(problema, pos_inicial, heuristica_1, heuristica_2):
           + str(solucion2.nodos_visitados))
     print('-' * 50 + '\n')
 
-
-if __name__ == "__main__":
+#if __name__ == "__main__":
 
     # Compara los métodos de búsqueda para el problema del camión mágico
     # con las heurísticas que desarrollaste
-    pos_inicial = XXXXXXXXXX  # <--- PONLE LA POSICIÓN INICIAL QUE QUIERAS
-    problema = PbCamionMagico( XXXXXXXXXX )  # <--- PONLE LOS PARÁMETROS QUE NECESITES
-    compara_metodos(problema, pos_inicial, h_1_camion_magico, h_2_camion_magico)
+    #pos_inicial = XXXXXXXXXX  # <--- PONLE LA POSICIÓN INICIAL QUE QUIERAS
+    #problema = PbCamionMagico( XXXXXXXXXX )  # <--- PONLE LOS PARÁMETROS QUE NECESITES
+    #compara_metodos(problema, pos_inicial, h_1_camion_magico, h_2_camion_magico)
     
     # Compara los métodos de búsqueda para el problema del cubo de rubik
     # con las heurísticas que desarrollaste
-    pos_inicial = XXXXXXXXXX  # <--- PONLE LA POSICIÓN INICIAL QUE QUIERAS
-    problema = PbCuboRubik( XXXXXXXXXX )  # <--- PONLE LOS PARÁMETROS QUE NECESITES
-    compara_metodos(problema, h_1_problema_1, h_2_problema_1)
-    
+    #pos_inicial = XXXXXXXXXX  # <--- PONLE LA POSICIÓN INICIAL QUE QUIERAS
+    #problema = PbCuboRubik( XXXXXXXXXX )  # <--- PONLE LOS PARÁMETROS QUE NECESITES
+    #compara_metodos(problema, h_1_problema_1, h_2_problema_1)
