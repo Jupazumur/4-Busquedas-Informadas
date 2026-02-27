@@ -154,10 +154,29 @@ class PbCuboRubik(busquedas.ProblemaBusqueda):
     
     """
     def __init__(self):
-        raise NotImplementedError('Hay que hacerlo de tarea')
+
+        # Representación 6x9
+        # Aplanado a un string de len 53
+        # 0 1 2
+        # 3 4 5
+        # 6 7 8
+
+        self.meta = (
+            "W" * 9 +  # U Up    - White
+            "Y" * 9 +  # D Down  - Yellow
+            "G" * 9 +  # F Front - Green
+            "B" * 9 +  # B Back  - Blue
+            "O" * 9 +  # L Left  - Orange
+            "R" * 9    # R Right - Red
+        )
 
     def acciones(self, estado):
-        raise NotImplementedError('Hay que hacerlo de tarea')
+        return ['U', 'U_inv',
+                'D', 'D_inv', 
+                'F', 'F_inv', 
+                'B', 'B_inv', 
+                'L', 'L_inv', 
+                'R', 'R_inv']
 
     def sucesor(self, estado, accion):
         raise NotImplementedError('Hay que hacerlo de tarea')
