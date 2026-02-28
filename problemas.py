@@ -9,7 +9,7 @@ Tarea sobre búsquedas, donde lo que es importante es crear nuevas heurísticas
 """
 
 import busquedas
-from math import log2
+from math import log2, ceil
 
 # ------------------------------------------------------------
 #  Desarrolla el modelo del Camión mágico
@@ -185,8 +185,7 @@ class PbCuboRubik(busquedas.ProblemaBusqueda):
         # - 3 para el anillo o corona
 
         # Se lee, usando el ejemplo de abajo:
-        # 0 a 2, 2 a 8, 8 a 6, 6 a 8
-        # Para visualizar mejor abrir index.html
+        # 0 a 2, 2 a 8, 8 a 6, 6 a 0
 
         # Ciclos Up
         ciclos_U = [
@@ -241,11 +240,39 @@ class PbCuboRubik(busquedas.ProblemaBusqueda):
             (14, 23, 5, 30),    # Corona Centro
             (17, 26, 8, 27)      # Corona Derecha
         ]
+        
+        movimientos = {
+            'U': ciclos_U,
+            'D': ciclos_D,
+            'F': ciclos_F,
+            'B': ciclos_B,
+            'L': ciclos_L,
+            'R': ciclos_R
+        }
+        
+        # Si la acción es antihoraria volteamos los ciclos
+        if accion.endswith('_inv'):
+            accion_base = accion.replace('_inv', '')
+            ciclos = [c[::-1] for c in movimientos[accion_base]]
+        else:
+            ciclos = movimientos[accion]
 
-        return 0
+        s = list(estado)
+        
+        for a, b, c, d in ciclos:
+            temp = s[d]
+            s[d] = s[c]
+            s[c] = s[b]
+            s[b] = s[a]
+            s[a] = temp
+            #s[d], s[c], s[b], s[a] = s[c], s[b], s[a], s[d]
+        
+        # Regresar a string, retornar con costo local
+        s_n = "".join(s)
+        return s_n, 1
 
     def terminal(self, estado):
-        raise NotImplementedError('Hay que hacerlo de tarea')
+        return estado == self.meta
 
     @staticmethod
     def bonito(estado):
@@ -258,13 +285,29 @@ class PbCuboRubik(busquedas.ProblemaBusqueda):
 # ------------------------------------------------------------
 #  Desarrolla una política admisible.
 # ------------------------------------------------------------
-def h_1_problema_1(nodo):
-    """
-    DOCUMENTA LA HEURÍSTICA QUE DESARROLLES Y DA UNA JUSTIFICACIÓN
-    PLATICADA DE PORQUÉ CREES QUE LA HEURÍSTICA ES ADMISIBLE
 
-    """
-    return 0
+def h_1_problema_1_helper(meta):
+    def h_1_problema_1(nodo):
+        """
+        Colores o stickers descolocados
+
+        Contamos cuantos stickers no estan donde deben respecto al
+        estado meta. Luego dividimos entre 20 ya que un movimiento
+        mueve 20 stickers (8 de la cara y 12 en la corona).
+
+        Lo que se calcula es el numero de movimientos restantes
+        estimados. Esta heurística es muy optimista porque siempre
+        asume que al mover esos 20 stickers se llega a un estado
+        más cerca a la meta. En realidad, como están conectados,
+        usualmente se desacomodan otros. Por lo tanto, el costo (mo-
+        vimientos) siempre va a ser igual o menor al real.
+        """
+        estado_actual = nodo.estado
+
+        descolocadas = sum(1 for i in range(54) if estado_actual[i] != meta[i])
+
+        return ceil(descolocadas / 20.0)
+    return h_1_problema_1
 
 # ------------------------------------------------------------
 #  Desarrolla otra política admisible.
