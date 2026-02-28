@@ -179,7 +179,70 @@ class PbCuboRubik(busquedas.ProblemaBusqueda):
                 'R', 'R_inv']
 
     def sucesor(self, estado, accion):
-        raise NotImplementedError('Hay que hacerlo de tarea')
+        # 1. Definimos los ciclos (horarios) para cada cara.
+        # Cada cara tiene 5 ciclos: 
+        # - 2 para rotar su propia cara (esquinas y aristas)
+        # - 3 para el anillo o corona
+
+        # Se lee, usando el ejemplo de abajo:
+        # 0 a 2, 2 a 8, 8 a 6, 6 a 8
+        # Para visualizar mejor abrir index.html
+
+        # Ciclos Up
+        ciclos_U = [
+            (0, 2, 8, 6),       # Esquinas
+            (1, 5, 7, 3),       # Aristas
+            (18, 36, 27, 45),   # Corona Izq
+            (19, 37, 28, 46),   # Corona Centro
+            (20, 38, 29, 47)    # Corona Derecha
+        ]
+
+        # Ciclos Down
+        ciclos_D = [
+            (9, 11, 17, 15),   # Esquinas
+            (10, 14, 16, 12),   # Aristas
+            (35, 44, 26, 53),    # Corona Izq
+            (34, 43, 25, 52),    # Corona Centro
+            (33, 42, 24, 51)      # Corona Derecha
+        ]
+
+        # Ciclos Front
+        ciclos_F = [
+            (18, 20, 26, 24),   # Esquinas
+            (19, 23, 25, 21),   # Aristas
+            (6, 45, 11, 44),    # Corona Izq
+            (7, 48, 10, 41),    # Corona Centro
+            (8, 51, 9, 38)      # Corona Derecha
+        ]
+
+        # Ciclos Back
+        ciclos_B = [
+            (27, 29, 35, 33),   # Esquinas
+            (28, 32, 34, 30),   # Aristas
+            (17, 47, 0, 42),    # Corona Izq
+            (16, 50, 1, 39),    # Corona Centro
+            (15, 53, 2, 36)      # Corona Derecha
+        ]
+
+        # Ciclos Left
+        ciclos_L = [
+            (36, 38, 44, 42),   # Esquinas
+            (37, 41, 43, 39),   # Aristas
+            (15, 29, 6, 24),    # Corona Izq
+            (12, 32, 3, 21),    # Corona Centro
+            (9, 35, 0, 18)      # Corona Derecha
+        ]
+
+        # Ciclos Right
+        ciclos_R = [
+            (45, 47, 53, 51),   # Esquinas
+            (46, 50, 52, 48),   # Aristas
+            (11, 20, 2, 33),    # Corona Izq
+            (14, 23, 5, 30),    # Corona Centro
+            (17, 26, 8, 27)      # Corona Derecha
+        ]
+
+        return 0
 
     def terminal(self, estado):
         raise NotImplementedError('Hay que hacerlo de tarea')
