@@ -11,9 +11,7 @@ con diferentes métodos de búsqueda
 
 __author__ = 'juliowaissman'
 
-
 import busquedas
-
 
 class Pb8Puzzle(busquedas.ProblemaBusqueda):
     """
@@ -122,27 +120,25 @@ def probando(pos_ini):
     problema = Pb8Puzzle()
     s0 = pos_ini[:] + (pos_ini.index(0),)  # Agrega la posición del espacio vacío al estado inicial
 
-    #print("---------- Utilizando BFS -------------")
-    #plan, nodos_visitados = busquedas.busqueda_ancho(problema, s0)
-    #print(plan)
-    #print(f"Explorando {nodos_visitados} nodos\n\n")
+    print("---------- Utilizando BFS -------------")
+    plan, nodos_visitados = busquedas.busqueda_ancho(problema, s0)
+    print(plan)
+    print(f"Explorando {nodos_visitados} nodos\n\n")
 
-    #print("---------- Utilizando DFS -------------")
-    #plan, nodos_visitados = busquedas.busqueda_profundo(problema, s0, 50)
-    #print(plan)
-    #print(f"Explorando {nodos_visitados} nodos\n\n")
+    print("---------- Utilizando DFS -------------")
+    plan, nodos_visitados = busquedas.busqueda_profundo(problema, s0, 50)
+    print(plan)
+    print(f"Explorando {nodos_visitados} nodos\n\n")
 
-    # ------- IDS -----------
-    #print("---------- Utilizando IDS -------------")
-    #plan, nodos_visitados = busquedas.busqueda_profundidad_iterativa(problema, s0, 50)
-    #print(plan)
-    #print(f"Explorando {nodos_visitados} nodos\n\n")
+    print("---------- Utilizando IDS -------------")
+    plan, nodos_visitados = busquedas.busqueda_profundidad_iterativa(problema, s0, 50)
+    print(plan)
+    print(f"Explorando {nodos_visitados} nodos\n\n")
 
-    # ------- UCS -----------
-    #print("---------- Utilizando UCS -------------")
-    #plan, nodos_visitados = busquedas.busqueda_costo_uniforme(problema, s0)
-    #print(plan)
-    #print(f"Explorando {nodos_visitados} nodos\n\n")
+    print("---------- Utilizando UCS -------------")
+    plan, nodos_visitados = busquedas.busqueda_costo_uniforme(problema, s0)
+    print(plan)
+    print(f"Explorando {nodos_visitados} nodos\n\n")
 
     print("---------- Utilizando A* con h1 -------------")
     solucion = busquedas.busqueda_A_estrella(problema, s0, h_1)

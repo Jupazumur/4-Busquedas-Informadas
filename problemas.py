@@ -71,6 +71,7 @@ class PbCamionMagico(busquedas.ProblemaBusqueda):
 # ------------------------------------------------------------
 #  Desarrolla una política admisible.
 # ------------------------------------------------------------
+
 def h_1_camion_magico_helper(N):
     """
     Clausura para mantener la estructura de la comparación
@@ -152,6 +153,9 @@ class PbCuboRubik(busquedas.ProblemaBusqueda):
     la documentación de forma clara y concisa.
     
     https://en.wikipedia.org/wiki/Rubik%27s_Cube
+
+    Visualización (no integrada al código):
+    https://pablington.com/ia/eval_comp/4-busquedas.html
     
     """
     def __init__(self):
@@ -199,11 +203,11 @@ class PbCuboRubik(busquedas.ProblemaBusqueda):
 
         # Ciclos Down
         ciclos_D = [
-            (9, 11, 17, 15),   # Esquinas
+            (9, 11, 17, 15),    # Esquinas
             (10, 14, 16, 12),   # Aristas
-            (35, 44, 26, 53),    # Corona Izq
-            (34, 43, 25, 52),    # Corona Centro
-            (33, 42, 24, 51)      # Corona Derecha
+            (35, 44, 26, 53),   # Corona Izq
+            (34, 43, 25, 52),   # Corona Centro
+            (33, 42, 24, 51)    # Corona Derecha
         ]
 
         # Ciclos Front
@@ -221,7 +225,7 @@ class PbCuboRubik(busquedas.ProblemaBusqueda):
             (28, 32, 34, 30),   # Aristas
             (17, 47, 0, 42),    # Corona Izq
             (16, 50, 1, 39),    # Corona Centro
-            (15, 53, 2, 36)      # Corona Derecha
+            (15, 53, 2, 36)     # Corona Derecha
         ]
 
         # Ciclos Left
@@ -239,7 +243,7 @@ class PbCuboRubik(busquedas.ProblemaBusqueda):
             (46, 50, 52, 48),   # Aristas
             (11, 20, 2, 33),    # Corona Izq
             (14, 23, 5, 30),    # Corona Centro
-            (17, 26, 8, 27)      # Corona Derecha
+            (17, 26, 8, 27)     # Corona Derecha
         ]
         
         movimientos = {
@@ -261,14 +265,8 @@ class PbCuboRubik(busquedas.ProblemaBusqueda):
         s = list(estado)
         
         for a, b, c, d in ciclos:
-            #temp = s[d]
-            #s[d] = s[c]
-            #s[c] = s[b]
-            #s[b] = s[a]
-            #s[a] = temp
             s[d], s[c], s[b], s[a] = s[c], s[b], s[a], s[d]
         
-        # Regresar a string, retornar con costo local
         s_n = "".join(s)
         return s_n, 1
 
@@ -315,6 +313,7 @@ def h_1_problema_1_helper(meta):
 #  Analiza y di porque piensas que es (o no es) dominante una
 #  respecto otra política
 # ------------------------------------------------------------
+
 def h_2_problema_1(nodo):
     """
     Distancia a cara meta
@@ -336,7 +335,6 @@ def h_2_problema_1(nodo):
     
     caras_colores = ['W', 'Y', 'G', 'B', 'O', 'R']
     
-    # Mapeo de colores opuestos en un cubo estándar
     opuestos = {
         'W': 'Y', 'Y': 'W',
         'G': 'B', 'B': 'G',
@@ -412,14 +410,12 @@ def compara_metodos(problema, pos_inicial, heuristica_1, heuristica_2):
 
 if __name__ == "__main__":
 
-    # Compara los métodos de búsqueda para el problema del camión mágico
-    # con las heurísticas que desarrollaste
+    # Camión Mágico
     pos_inicial = (1,)
     problema = PbCamionMagico(1000)
     compara_metodos(problema, pos_inicial, h_1_camion_magico_helper(problema.meta), h_2_camion_magico_helper(problema.meta))
     
-    # Compara los métodos de búsqueda para el problema del cubo de rubik
-    # con las heurísticas que desarrollaste
+    # Cubo Rubiks
     problema_rubiks = PbCuboRubik()
-    pos_inicial_rubiks = _desarmar_rubik(problema_rubiks, 6)
+    pos_inicial_rubiks = _desarmar_rubik(problema_rubiks)
     compara_metodos(problema_rubiks, pos_inicial_rubiks, h_1_problema_1_helper(problema_rubiks.meta), h_2_problema_1)

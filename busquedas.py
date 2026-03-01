@@ -12,7 +12,6 @@ completamente observables
 from collections import deque
 import heapq
 
-
 class ProblemaBusqueda:
     """
     Clase genérica de un modelo de búsqueda.
@@ -55,7 +54,6 @@ class ProblemaBusqueda:
 
         """
         raise NotImplementedError("No implementado todavía el método terminal.")
-
 
 class NodoBusqueda:
     """
@@ -123,7 +121,6 @@ class NodoBusqueda:
         "Ordena nodos por su profundidad sobrecargando <"
         return self.profundidad < other.profundidad
 
-
 def busqueda_ancho(problema, s0):
     """
     Búsqueda a lo ancho para un problema de búsquedas dado
@@ -152,7 +149,6 @@ def busqueda_ancho(problema, s0):
             estados_visitados.add(hijo.estado)
     return None, nodos_visitados
 
-
 def busqueda_profundo(problema, s0, max_profundidad=None):
     """
     Búsqueda a lo profundo para un problema de búsquedas dado
@@ -180,7 +176,6 @@ def busqueda_profundo(problema, s0, max_profundidad=None):
                 visitados[hijo.estado] = hijo.profundidad
     return None, nodos_visitados
 
-
 def busqueda_profundidad_iterativa(problema, s0, max_profundidad=20):
     """
     Búsqueda por profundidad iterativa dado
@@ -197,7 +192,6 @@ def busqueda_profundidad_iterativa(problema, s0, max_profundidad=20):
         if plan is not None:
             return plan, nodos_visitados
     return None, nodos_visitados
-
 
 def busqueda_costo_uniforme(problema, s0):
     """
@@ -233,7 +227,6 @@ def busqueda_costo_uniforme(problema, s0):
 # resultado esperado)
 #
 # ---------------------------------------------------------------------
-
 
 def busqueda_A_estrella(problema, s0, heuristica):
     """
