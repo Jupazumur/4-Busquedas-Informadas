@@ -10,6 +10,7 @@ Tarea sobre búsquedas, donde lo que es importante es crear nuevas heurísticas
 
 import busquedas
 from math import log2, ceil
+from random import choice
 
 # ------------------------------------------------------------
 #  Desarrolla el modelo del Camión mágico
@@ -260,12 +261,12 @@ class PbCuboRubik(busquedas.ProblemaBusqueda):
         s = list(estado)
         
         for a, b, c, d in ciclos:
-            temp = s[d]
-            s[d] = s[c]
-            s[c] = s[b]
-            s[b] = s[a]
-            s[a] = temp
-            #s[d], s[c], s[b], s[a] = s[c], s[b], s[a], s[d]
+            #temp = s[d]
+            #s[d] = s[c]
+            #s[c] = s[b]
+            #s[b] = s[a]
+            #s[a] = temp
+            s[d], s[c], s[b], s[a] = s[c], s[b], s[a], s[d]
         
         # Regresar a string, retornar con costo local
         s_n = "".join(s)
@@ -316,11 +317,73 @@ def h_1_problema_1_helper(meta):
 # ------------------------------------------------------------
 def h_2_problema_1(nodo):
     """
-    DOCUMENTA LA HEURÍSTICA DE DESARROLLES Y DA UNA JUSTIFICACIÓN
-    PLATICADA DE PORQUÉ CREES QUE LA HEURÍSTICA ES ADMISIBLE
+    Distancia a cara meta
+
+    En esta en vez de la distancia al lugar exacto del sticker,
+    calculamos la distancia a la cara correcta en términos de
+    movimientos. Es 0 si está en la cara correcta, 1 si el lu-
+    gar correcto está en una cara adyacente, y 2 si está en la
+    cara opuesta a la en que se encuentra actualmente.
+
+    Dividimos el resultado entre 12, la cantidad de caras en la
+    corona, porque son las únicas que viajan a una nueva cara al
+    hacer un movimiento.
+
+    Ya que esta es una relajación de h1, es admisible.
 
     """
-    return 0
+    estado = nodo.estado
+    
+    caras_colores = ['W', 'Y', 'G', 'B', 'O', 'R']
+    
+    # Mapeo de colores opuestos en un cubo estándar
+    opuestos = {
+        'W': 'Y', 'Y': 'W',
+        'G': 'B', 'B': 'G',
+        'O': 'R', 'R': 'O'
+    }
+    
+    distancia_total = 0
+    
+    for i, color_actual in enumerate(estado):
+        
+        # Ignoramos los centros
+        if i % 9 == 4:
+            continue
+            
+        # Bloque en el que estamos
+        color_cara = caras_colores[i // 9]
+        
+        if color_actual == color_cara:
+            distancia_total += 0
+        elif opuestos[color_actual] == color_cara:
+            distancia_total += 2
+        else:
+            distancia_total += 1
+            
+    return ceil(distancia_total / 12.0)
+
+# Conclusión
+# La segunda heurística es dominante respecto a la primera. La primer heurística
+# regresa matemáticamente 1/20 del total, mientras que la segunda regresa 1/12
+# del total. Al saber que ambas son admisibles podemos concluir que h2 se acerca
+# más al costo real. También, viendo los resultados, se nota la diferencia en
+# cuanto a nodos explorados. 
+
+def _desarmar_rubik(problema, movimientos=5):
+    """
+    Desarma el cubo aplicando una secuencia aleatoria de movimientos
+    """
+    estado_actual = problema.meta
+    acciones_posibles = problema.acciones(estado_actual)
+    
+    secuencia = [choice(acciones_posibles) for _ in range(movimientos)]
+    print(f"Secuencia de desarme: {secuencia}")
+    
+    for accion in secuencia:
+        estado_actual, _ = problema.sucesor(estado_actual, accion)
+        
+    return estado_actual
 
 def compara_metodos(problema, pos_inicial, heuristica_1, heuristica_2):
     """
@@ -357,6 +420,6 @@ if __name__ == "__main__":
     
     # Compara los métodos de búsqueda para el problema del cubo de rubik
     # con las heurísticas que desarrollaste
-    #pos_inicial = XXXXXXXXXX  # <--- PONLE LA POSICIÓN INICIAL QUE QUIERAS
-    #problema = PbCuboRubik( XXXXXXXXXX )  # <--- PONLE LOS PARÁMETROS QUE NECESITES
-    #compara_metodos(problema, h_1_problema_1, h_2_problema_1)
+    problema_rubiks = PbCuboRubik()
+    pos_inicial_rubiks = _desarmar_rubik(problema_rubiks, 6)
+    compara_metodos(problema_rubiks, pos_inicial_rubiks, h_1_problema_1_helper(problema_rubiks.meta), h_2_problema_1)
