@@ -66,7 +66,7 @@ class PbCamionMagico(busquedas.ProblemaBusqueda):
         El prettyprint de un estado dado
 
         """
-        raise NotImplementedError('Hay que hacerlo de tarea')
+        print(f"Estado actual: {estado}")
 
 # ------------------------------------------------------------
 #  Desarrolla una política admisible.
@@ -76,6 +76,7 @@ def h_1_camion_magico_helper(N):
     """
     Clausura para mantener la estructura de la comparación
     """
+
     def h_1_camion_magico(nodo):
         """
         Mínimo de pasos
@@ -114,6 +115,7 @@ def h_2_camion_magico_helper(N):
     """
     Clausura para mantener la estructura de la comparación
     """
+
     def h_2_camion_magico(nodo):
 
         """
@@ -161,7 +163,7 @@ class PbCuboRubik(busquedas.ProblemaBusqueda):
     def __init__(self):
 
         # Representación 6x9
-        # Aplanado a un string de len 53
+        # Aplanado a un string de len 54
         # 0 1 2
         # 3 4 5
         # 6 7 8
@@ -277,15 +279,21 @@ class PbCuboRubik(busquedas.ProblemaBusqueda):
     def bonito(estado):
         """
         El prettyprint de un estado dado
+        En orden: U, D, F, B, L, R
 
         """
-        raise NotImplementedError('Hay que hacerlo de tarea')
+        for i in range(0, len(estado), 9):
+            print(estado[i:i+9])
 
 # ------------------------------------------------------------
 #  Desarrolla una política admisible.
 # ------------------------------------------------------------
 
 def h_1_problema_1_helper(meta):
+    """
+    Clausura para mantener la estructura de la compración
+    """
+
     def h_1_problema_1(nodo):
         """
         Colores o stickers descolocados
@@ -306,6 +314,7 @@ def h_1_problema_1_helper(meta):
         descolocadas = sum(1 for i in range(54) if estado_actual[i] != meta[i])
 
         return ceil(descolocadas / 20.0)
+    
     return h_1_problema_1
 
 # ------------------------------------------------------------
